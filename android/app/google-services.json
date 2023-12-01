@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "275310988623",
+    "project_id": "systemaccesscontrol-20a2c",
+    "storage_bucket": "systemaccesscontrol-20a2c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:275310988623:android:54d330e80b1b6f95ee093a",
+        "android_client_info": {
+          "package_name": "com.example.accessflow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4e5mXWsOLYsUaHNxlGsswbFQ3W3GL7hk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
