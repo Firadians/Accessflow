@@ -75,27 +75,30 @@ class AccessCardContentState extends State<AccessCardContent> {
     return Stack(
       children: [
         Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            leading: IconButton(
-              icon: Icon(
-                Icons.close,
-                color: Colors.white,
-              ),
-              onPressed: () {
+          appBar: CustomAppBar(
+            title: 'Access Card',
+            description: 'Access Card',
+            leading: GestureDetector(
+              onTap: () {
                 Navigator.pop(context);
               },
+              child: Image.asset('assets/icons/icon_close.png',
+                  height: 24, width: 24),
             ),
-            title: Text(CreateCardAssets.accessCardText,
-                style: Theme.of(context).textTheme.headline2),
+            actions: [
+              SubmitCompleteDraftConfirm(
+                onSubmit: _createDraftCard,
+                validateFields: validateFieldsDraft,
+              ),
+            ],
           ),
           body: SingleChildScrollView(
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  buildTitleText(),
-                  buildDescriptionText(),
+                  // buildTitleText(),
+                  // buildDescriptionText(),
                   CustomTextEditableWidget(
                     controller: nameController,
                     labelText: CreateCardAssets.nameLabelText,
@@ -118,9 +121,25 @@ class AccessCardContentState extends State<AccessCardContent> {
                               onPressed: () {
                                 myAlert(1);
                               },
-                              child: Text('Pilih Pas Foto'),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0),
+                                child: const Text('Pilih Pas Foto'),
+                              ),
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(38.0),
+                                  ),
+                                ),
+                                padding: MaterialStateProperty.all<
+                                    EdgeInsetsGeometry>(
+                                  const EdgeInsets.symmetric(vertical: 15.0),
+                                ),
+                              ),
                             ),
-                            SizedBox(width: 10),
+                            SizedBox(width: 15),
                             Expanded(
                               child: buildClickableImageName(
                                   profileImageName, profileImageFile),
@@ -154,26 +173,39 @@ class AccessCardContentState extends State<AccessCardContent> {
           bottom: 0,
           left: 0,
           right: 0,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  child: SubmitCompleteDraftConfirm(
-                    onSubmit: _createDraftCard,
-                    validateFields: validateFieldsDraft,
-                  ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 1,
+                // margin: EdgeInsets.symmetric(horizontal: 20), // Optional margin
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(
+                      255, 201, 201, 201), // Color of the divider
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromARGB(66, 178, 178, 178), // Shadow color
+                      offset: Offset(0, -4), // Offset in x and y directions
+                      blurRadius: 2, // Blur radius
+                    ),
+                  ],
                 ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: SubmitCompleteDataConfirm(
-                    onSubmit: _createCard,
-                    validateFields: validateFieldsSubmit,
-                  ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: SubmitCompleteDataConfirm(
+                        onSubmit: _createCard,
+                        validateFields: validateFieldsSubmit,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ],
@@ -191,7 +223,7 @@ class AccessCardContentState extends State<AccessCardContent> {
             children: [
               CircularProgressIndicator(),
               SizedBox(height: 10),
-              Text('Submitting Data...'),
+              Text('Data Sedang Diproses...'),
             ],
           ),
         );
@@ -204,9 +236,9 @@ class AccessCardContentState extends State<AccessCardContent> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text('Name Taken'),
+              title: Text('Nama telah tersedia'),
               content: Text(
-                  'The name is already taken. Please choose a different name.'),
+                  'Silahkan gunakan nama lain atau silahkan cek kartu yang tersedia/pernah dibuat.'),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -344,10 +376,10 @@ class AccessCardContentState extends State<AccessCardContent> {
         Uint8List bytes = base64Decode(card.photo!);
         // Create an image widget from the bytes
         profileImageFile = Image.memory(bytes);
-        profileImageName = 'Image Selected';
+        profileImageName = 'Gambar telah dipilih';
       } else if (card.photo is File) {
         profileImageFile = card.photo;
-        profileImageName = 'Image Selected';
+        profileImageName = 'Gambar telah dipilih';
       }
     }
     selectedItem = card.cardSubType;
@@ -360,7 +392,7 @@ class AccessCardContentState extends State<AccessCardContent> {
       builder: (BuildContext context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          title: Text('Please choose media to select'),
+          title: Text('Silahkan pilih media'),
           content: Container(
             height: MediaQuery.of(context).size.height / 8,
             child: Row(
@@ -375,7 +407,7 @@ class AccessCardContentState extends State<AccessCardContent> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.image, size: 64),
-                        Text('From Gallery'),
+                        Text('Dari Galeri'),
                       ],
                     ),
                   ),
@@ -391,7 +423,7 @@ class AccessCardContentState extends State<AccessCardContent> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.camera, size: 64),
-                        Text('From Camera'),
+                        Text('Dari Kamera'),
                       ],
                     ),
                   ),
@@ -413,7 +445,7 @@ class AccessCardContentState extends State<AccessCardContent> {
           if (imageNumber == 1) {
             isNew = true;
             profileImageFile = File(pickedFile.path);
-            profileImageName = 'Image Selected';
+            profileImageName = 'Gambar Dipilih';
           }
         }
       });
@@ -459,8 +491,8 @@ class AccessCardContentState extends State<AccessCardContent> {
       },
       child: Text(
         imageFile != null
-            ? 'Click here to see'
-            : imageName ?? 'No Image Selected',
+            ? 'Klik disini untuk lihat'
+            : imageName ?? 'Tidak ada gambar',
         style: TextStyle(
           color: imageFile != null ? Colors.blue : Colors.grey,
           decoration: imageFile != null
@@ -489,36 +521,87 @@ Future<String?> getEmailFromSharedPreferences() async {
   return prefs.getString('email');
 }
 
-Widget buildTitleText() {
-  return Container(
-    alignment: Alignment.centerLeft,
-    padding: const EdgeInsets.fromLTRB(20, 20, 10, 20),
-    child: const Text(
-      'Perlu Diperhatikan',
-      style: TextStyle(
-        fontFamily:
-            'roboto', // Specify the font family if you have a custom font
-        color: Color.fromARGB(255, 4, 4, 4),
-        fontWeight: FontWeight.w900,
-        fontSize: 30,
-      ),
-    ),
-  );
-}
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+  final String description;
+  final Widget? leading;
+  final List<Widget>? actions;
+  const CustomAppBar(
+      {super.key,
+      required this.title,
+      required this.description,
+      this.leading,
+      this.actions});
 
-Widget buildDescriptionText() {
-  return Container(
-    alignment: Alignment.centerLeft,
-    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-    child: const Text(
-      'Data yang diisi bukan merupakan data yang pernah didaftarkan sebelumnya (Baru). Pastikan data yang dimasukkan sesuai dengan ketentuan.',
-      textAlign: TextAlign.justify,
-      style: TextStyle(
-        fontFamily:
-            'roboto', // Specify the font family if you have a custom font
-        color: Color.fromARGB(255, 25, 25, 25),
-        fontSize: 14,
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Color.fromARGB(255, 1, 58, 73),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(35),
+          bottomRight: Radius.circular(35),
+        ),
       ),
-    ),
-  );
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(1.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: leading,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: actions ?? [],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20), // Space between title and description
+            Text(
+              description,
+              style: TextStyle(
+                fontFamily:
+                    'roboto', // Specify the font family if you have a custom font
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontWeight: FontWeight.w600,
+                fontSize: 30,
+              ),
+            ),
+            const SizedBox(height: 20), // Space between description and image
+            Text(
+              'Data yang diisi bukan merupakan data yang pernah didaftarkan sebelumnya (Baru). Pastikan data yang dimasukkan sesuai dengan ketentuan.',
+              textAlign: TextAlign.justify,
+              style: TextStyle(
+                fontFamily:
+                    'roboto', // Specify the font family if you have a custom font
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontWeight: FontWeight.w100,
+                fontSize: 14,
+                height: 1.5, // Add line spacing here
+              ),
+            ),
+            const SizedBox(height: 20), // Space between description and image
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight + 210);
 }

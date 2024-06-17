@@ -50,9 +50,8 @@ class ProfileScreen extends StatelessWidget {
               [
                 // _buildProfileHeader(),
                 _buildSectionTitle('General'),
-                _buildSectionItem(Icons.language_outlined, 'Language', context),
                 _buildSectionItem(
-                    Icons.notifications_none, 'Notification Settings', context),
+                    Icons.notifications_none, 'Pengaturan Notifikasi', context),
                 _buildSectionItem(Icons.help_outline_rounded, 'FAQ', context),
                 _buildSectionItem(
                     Icons.privacy_tip_rounded, 'Terms of Service', context),
@@ -85,8 +84,8 @@ class ProfileScreen extends StatelessWidget {
           case 'Language':
             Navigator.pushNamed(context, '/language');
             break;
-          case 'Notification Settings':
-            Navigator.pushNamed(context, '/notification_settings');
+          case 'Pengaturan Notifikasi':
+            Navigator.pushNamed(context, '/pengaturan_notifikasi');
             break;
           case 'FAQ':
             Navigator.pushNamed(context, '/faq');
@@ -155,7 +154,7 @@ class ProfileScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 14),
         child: Center(
           child: Text(
-            'Log Out',
+            'Keluar',
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,

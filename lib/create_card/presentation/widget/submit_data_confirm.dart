@@ -138,15 +138,50 @@ class SubmitCompleteDataConfirm extends StatelessWidget {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                      20.0), // Adjust the radius as needed
+                ),
                 title: const Text('Validation Error'),
-                content: const Text(
-                    'Please fill in all required fields and ensure they are valid.'),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
+                      'assets/icons/icon_warning.png',
+                      width: 160,
+                      height: 160,
+                    ), // Adjust the path as needed
+                    const SizedBox(
+                        height:
+                            16), // Add some space between the image and text
+                    const Text(
+                        'Mohon untuk mengisi seluruh kolom field yang kosong dan pastikan data yang dimasukkan sesuai!'),
+                  ],
+                ),
                 actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('OK'),
+                  Center(
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style: TextButton.styleFrom(
+                          backgroundColor: const Color.fromARGB(255, 1, 58,
+                              73), // Set the background color if needed
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                50), // Circular border radius
+                          ),
+                        ),
+                        child: const Text(
+                          'Kembali',
+                          style: TextStyle(
+                              color:
+                                  Colors.white), // Set the text color to white
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               );
@@ -183,10 +218,23 @@ class SubmitCompleteDataConfirm extends StatelessWidget {
           );
         }
       },
-      child: const Text('Submit'),
+      child: const Text(
+        'Submit',
+        style: TextStyle(
+          fontWeight: FontWeight.bold, // Make the text bold
+        ),
+      ),
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(
-            const Color.fromARGB(255, 84, 192, 51)),
+            const Color.fromARGB(215, 53, 163, 57)),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(28.0),
+          ),
+        ),
+        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+          const EdgeInsets.symmetric(vertical: 15.0),
+        ),
       ),
     );
   }
@@ -200,8 +248,11 @@ class SubmitCompleteDraftConfirm extends StatelessWidget {
       {super.key, required this.onSubmit, required this.validateFields});
 
   @override
+  @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
+    return IconButton(
+      icon: Image.asset('assets/icons/icon_safe_draft.png',
+          height: 24, width: 24), // Change to your local image asset
       onPressed: () async {
         bool validateResult = validateFields();
         if (!validateResult) {
@@ -237,6 +288,8 @@ class SubmitCompleteDraftConfirm extends StatelessWidget {
                   TextButton(
                     onPressed: () async {
                       await onSubmit();
+                      Navigator.of(context)
+                          .pop(); // Close the dialog after submission
                     },
                     child: const Text('Yes'),
                   ),
@@ -253,11 +306,6 @@ class SubmitCompleteDraftConfirm extends StatelessWidget {
           );
         }
       },
-      child: const Text('Save Draft'),
-      style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all<Color>(
-            const Color.fromARGB(255, 206, 170, 27)),
-      ),
     );
   }
 }

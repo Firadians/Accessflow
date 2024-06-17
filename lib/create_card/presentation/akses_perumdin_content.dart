@@ -103,15 +103,7 @@ class _AksesPerumdinContentState extends State<AksesPerumdinContent> {
           },
         );
       } else {
-        // String? profileImageUrl;
         String? owner = await sharedPreference.getUserFromSharedPreferences();
-
-        // if (profileImageFile != null && isNew == true) {
-        //   profileImageUrl = await imageFileToBase64(profileImageFile);
-        // } else {
-        //   profileImageUrl = profileImageFile;
-        // }
-        // Perform an update operation if in edit mode
         cardRepository
             .insertCard(
                 id,
@@ -328,106 +320,144 @@ class _AksesPerumdinContentState extends State<AksesPerumdinContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            Icons.close, // You can use a different icon if needed
-            color: Colors.white, // Customize the color
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: CustomAppBar(
+            title: 'Akses Perumdin',
+            description: 'Akses Perumdin',
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Image.asset('assets/icons/icon_close.png',
+                  height: 24, width: 24),
+            ),
+            actions: [
+              SubmitCompleteDraftConfirm(
+                onSubmit: _createDraftCard,
+                validateFields: validateFieldsDraft,
+              ),
+            ],
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: Text('Akses Perumdin',
-            style: Theme.of(context).textTheme.headline2),
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              buildTitleText(),
-              buildDescriptionText(),
-              CustomTextEditableWidget(
-                controller: nameController,
-                labelText: 'Nama',
-                hintText: 'Masukkan Nama Anda',
-                isEditing: true,
-              ),
-              CustomNumberEditableWidget(
-                controller: ktpController,
-                labelText: 'Nomor KTP',
-                hintText: 'Masukkan Nomor KTP Anda',
-                isEditing: true,
-              ),
-              Column(
+          body: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(
-                        20, 0, 0, 0), // Add left spacing of 10 units
-                    child: Row(
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            myAlert(1);
-                          },
-                          child: Text('Pilih Pas Foto'),
-                        ),
-                        SizedBox(width: 10), // Add spacing
-                        Expanded(
-                          child: buildClickableImageName(
-                              profileImageName, profileImageFile),
-                        ),
-                      ],
-                    ),
+                  // buildTitleText(),
+                  // buildDescriptionText(),
+                  CustomTextEditableWidget(
+                    controller: nameController,
+                    labelText: 'Nama',
+                    hintText: 'Masukkan Nama Anda',
+                    isEditing: true,
                   ),
-                ],
-              ),
-              SelectDropList(
-                itemSelected: optionItemSelected,
-                dropListModel: dropListModel,
-                showIcon: true, // Show Icon in DropDown Title
-                showArrowIcon: true, // Show Arrow Icon in DropDown
-                showBorder: true,
-                paddingTop: 0,
-                icon: const Icon(Icons.person, color: Colors.black),
-                onOptionSelected: (optionItem) {
-                  optionItemSelected = optionItem;
-                  setState(() {
-                    selectedItem = optionItemSelected.title.toString();
-                  });
-                },
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  CustomNumberEditableWidget(
+                    controller: ktpController,
+                    labelText: 'Nomor KTP',
+                    hintText: 'Masukkan Nomor KTP Anda',
+                    isEditing: true,
+                  ),
+                  Column(
                     children: [
-                      Expanded(
-                        child: SubmitCompleteDraftConfirm(
-                          onSubmit: _createDraftCard,
-                          validateFields: validateFieldsDraft,
-                        ),
-                      ),
-                      SizedBox(width: 10), // Add spacing between the buttons
-                      Expanded(
-                        child: SubmitCompleteDataConfirm(
-                          onSubmit: _createCard,
-                          validateFields: validateFieldsSubmit,
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(
+                            20, 0, 0, 0), // Add left spacing of 10 units
+                        child: Row(
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                myAlert(1);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0),
+                                child: const Text('Pilih Pas Foto'),
+                              ),
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(38.0),
+                                  ),
+                                ),
+                                padding: MaterialStateProperty.all<
+                                    EdgeInsetsGeometry>(
+                                  const EdgeInsets.symmetric(vertical: 15.0),
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 15), // Add spacing
+                            Expanded(
+                              child: buildClickableImageName(
+                                  profileImageName, profileImageFile),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
+                  SelectDropList(
+                    itemSelected: optionItemSelected,
+                    dropListModel: dropListModel,
+                    showIcon: true, // Show Icon in DropDown Title
+                    showArrowIcon: true, // Show Arrow Icon in DropDown
+                    showBorder: true,
+                    paddingTop: 0,
+                    icon: const Icon(Icons.person, color: Colors.black),
+                    onOptionSelected: (optionItem) {
+                      optionItemSelected = optionItem;
+                      setState(() {
+                        selectedItem = optionItemSelected.title.toString();
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 1,
+                // margin: EdgeInsets.symmetric(horizontal: 20), // Optional margin
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(
+                      255, 201, 201, 201), // Color of the divider
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromARGB(66, 178, 178, 178), // Shadow color
+                      offset: Offset(0, -4), // Offset in x and y directions
+                      blurRadius: 2, // Blur radius
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: SubmitCompleteDataConfirm(
+                        onSubmit: _createCard,
+                        validateFields: validateFieldsSubmit,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
         ),
-      ),
+      ],
     );
   }
 
@@ -457,36 +487,121 @@ Future<String?> getEmailFromSharedPreferences() async {
   return prefs.getString('email');
 }
 
-Widget buildTitleText() {
-  return Container(
-    alignment: Alignment.centerLeft,
-    padding: const EdgeInsets.fromLTRB(20, 20, 10, 20),
-    child: const Text(
-      'Perlu Diperhatikan',
-      style: TextStyle(
-        fontFamily:
-            'roboto', // Specify the font family if you have a custom font
-        color: Color.fromARGB(255, 4, 4, 4),
-        fontWeight: FontWeight.w900,
-        fontSize: 30,
-      ),
-    ),
-  );
-}
+// Widget buildTitleText() {
+//   return Container(
+//     alignment: Alignment.centerLeft,
+//     padding: const EdgeInsets.fromLTRB(20, 20, 10, 20),
+//     child: const Text(
+//       'Perlu Diperhatikan',
+//       style: TextStyle(
+//         fontFamily:
+//             'roboto', // Specify the font family if you have a custom font
+//         color: Color.fromARGB(255, 4, 4, 4),
+//         fontWeight: FontWeight.w900,
+//         fontSize: 30,
+//       ),
+//     ),
+//   );
+// }
 
-Widget buildDescriptionText() {
-  return Container(
-    alignment: Alignment.centerLeft,
-    padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
-    child: const Text(
-      'Data yang diisi bukan merupakan data yang pernah didaftarkan sebelumnya (Baru). Pastikan data yang dimasukkan sesuai dengan ketentuan.',
-      textAlign: TextAlign.justify,
-      style: TextStyle(
-        fontFamily:
-            'roboto', // Specify the font family if you have a custom font
-        color: Color.fromARGB(255, 25, 25, 25),
-        fontSize: 14,
+// Widget buildDescriptionText() {
+//   return Container(
+//     alignment: Alignment.centerLeft,
+//     padding: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+//     child: const Text(
+//       'Data yang diisi bukan merupakan data yang pernah didaftarkan sebelumnya (Baru). Pastikan data yang dimasukkan sesuai dengan ketentuan.',
+//       textAlign: TextAlign.justify,
+//       style: TextStyle(
+//         fontFamily:
+//             'roboto', // Specify the font family if you have a custom font
+//         color: Color.fromARGB(255, 25, 25, 25),
+//         fontSize: 14,
+//       ),
+//     ),
+//   );
+// }
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+  final String description;
+  final Widget? leading;
+  final List<Widget>? actions;
+  const CustomAppBar(
+      {super.key,
+      required this.title,
+      required this.description,
+      this.leading,
+      this.actions});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Color.fromARGB(255, 1, 58, 73),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(35),
+          bottomRight: Radius.circular(35),
+        ),
       ),
-    ),
-  );
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(1.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: leading,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: actions ?? [],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20), // Space between title and description
+            Text(
+              description,
+              style: TextStyle(
+                fontFamily:
+                    'roboto', // Specify the font family if you have a custom font
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontWeight: FontWeight.w600,
+                fontSize: 30,
+              ),
+            ),
+            const SizedBox(height: 20), // Space between description and image
+            Text(
+              'Data yang diisi bukan merupakan data yang pernah didaftarkan sebelumnya (Baru). Pastikan data yang dimasukkan sesuai dengan ketentuan.',
+              textAlign: TextAlign.justify,
+              style: TextStyle(
+                fontFamily:
+                    'roboto', // Specify the font family if you have a custom font
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontWeight: FontWeight.w100,
+                fontSize: 14,
+                height: 1.5, // Add line spacing here
+              ),
+            ),
+            const SizedBox(height: 20), // Space between description and image
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight + 210);
 }

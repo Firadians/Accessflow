@@ -136,7 +136,10 @@ class DraftScreenState extends State<DraftScreen> {
                                                   const EdgeInsetsDirectional
                                                       .fromSTEB(0, 5, 0, 0),
                                               child: Text(
-                                                'Disimpan pada : ${card.createData}',
+                                                '${HistoryAssets.cardSaveDateText} : ${card.createData}',
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        12.0), // Specify the font size here
                                               ),
                                             ),
                                           ],

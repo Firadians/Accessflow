@@ -7,7 +7,7 @@ import 'package:accessflow/utils/strings.dart';
 class CardRepository {
   static const baseUrl = ApiEndpoints.baseUrl;
   final SharedPreference sharedPreference = SharedPreference();
-
+  late http.Client client; // Add this line to declare the http.Client
   Future<List<CardResponse>> getSubmitCardData() async {
     String? owner =
         (await sharedPreference.getUserFromSharedPreferences()) ?? '';

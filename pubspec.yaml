@@ -35,6 +35,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
+  flutter_local_notifications: ^12.0.0
+  
   # For launcher icons  
   flutter_launcher_icons: ^0.13.1
 
@@ -117,6 +119,8 @@ dependencies:
   #url launcher
   url_launcher: ^6.0.12  # Use the latest version of url_launcher
   http: ^1.1.0
+
+  test: any
 
   mockito: ^5.4.2
   
@@ -210,6 +214,9 @@ flutter:
     - assets/icons/icon_access_card.png
     - assets/icons/icon_id_card.png
     - assets/icons/icon_akses_perumdin.png
+    - assets/icons/icon_close.png
+    - assets/icons/icon_safe_draft.png
+    - assets/icons/icon_warning.png
 
   #ONBOARDING
     - assets/onboarding/onboarding_first.png

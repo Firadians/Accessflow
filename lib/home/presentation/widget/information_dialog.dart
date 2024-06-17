@@ -10,9 +10,9 @@ class _InformationDialogState extends State<InformationDialog> {
 
   final List<Widget> pages = [
     InformationPage(
-      title: 'Welcome to AccessFlow',
+      title: 'Selamat Datang di AccessFlow',
       content:
-          'This is a access card making application for PT Petrokimia Gresik. There are several functionality of this app.',
+          'Ini merupakan aplikasi Departemen Keamanan PT Petrokimia Gresik yang bertujuan untuk menangani pembuatan kartu akses',
       imagePath: 'assets/guide/app_guide_one.png',
     ),
     InformationPage(
@@ -70,6 +70,10 @@ class _InformationDialogState extends State<InformationDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.circular(20.0), // Circular border for AlertDialog
+      ),
       title: Text('Application Guide - Page ${currentPage + 1}'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -83,7 +87,13 @@ class _InformationDialogState extends State<InformationDialog> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: previousPage,
-                    child: Text('Previous'),
+                    child: Text('Kembali'),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            20.0), // Circular border for buttons
+                      ),
+                    ),
                   ),
                 ),
               if (currentPage > 0 && currentPage != pages.length - 1)
@@ -92,14 +102,26 @@ class _InformationDialogState extends State<InformationDialog> {
                 Expanded(
                   child: ElevatedButton(
                     onPressed: nextPage,
-                    child: Text('Next'),
+                    child: Text('Berikutnya'),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            20.0), // Circular border for buttons
+                      ),
+                    ),
                   ),
                 ),
               if (currentPage == pages.length - 1)
                 Expanded(
                   child: ElevatedButton(
                     onPressed: closePage,
-                    child: Text('Finish'),
+                    child: Text('Selesai'),
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                            20.0), // Circular border for buttons
+                      ),
+                    ),
                   ),
                 ),
             ],

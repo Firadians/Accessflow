@@ -1,5 +1,5 @@
 class ApiEndpoints {
-  static const String baseUrl = 'https://bd2f-125-164-84-38.ngrok-free.app';
+  static const String baseUrl = 'https://2c29-110-139-21-253.ngrok-free.app';
 }
 
 class MainAssets {
@@ -19,18 +19,17 @@ class MainAssets {
 class GlobalAssets {
   static const String ktpText = 'KTP';
   static const String passwordText = 'Password';
-  static const String noConnectionText = 'No Connection';
-  static const String pleaseCheckText =
-      'Please check your internet connectivity';
-  static const String cancelText = 'Cancel';
+  static const String noConnectionText = 'Tidak ada Koneksi';
+  static const String pleaseCheckText = 'Silahkan cek koneksi anda';
+  static const String cancelText = 'Batal';
   static const String okText = 'OK';
 
   static const String noDataImage = 'assets/utils/no_data_available.png';
-  static const String noDataText = 'No data available.';
-  static const String noCardDataText = 'No card data available.';
+  static const String noDataText = 'data tidak tersedia.';
+  static const String noCardDataText = 'data tidak tersedia.';
 
   static const String dateFormat = 'yyyy-MM-dd HH:mm:ss';
-  static const String noData = 'no data';
+  static const String noData = 'data tidak tersedia';
 }
 
 class HomeAssets {
@@ -48,9 +47,9 @@ class HomeAssets {
   static const String userGuideIcon = 'assets/icons/icon_user_guide.png';
 
   //TEXT
-  static const String welcomeText = 'Welcome';
-  static const String nameGuestText = 'Guest';
-  static const String historyText = 'History';
+  static const String welcomeText = 'Selamat Datang';
+  static const String nameGuestText = 'Pengunjung';
+  static const String historyText = 'Riwayat';
   static const String cardStatusText = 'Status Pengisian Data';
   static const String createNewText = 'Buat Baru';
   static const String printAvailableText = 'Cetak Ulang';
@@ -66,13 +65,13 @@ class HomeAssets {
   static const String cardCreateStatusText = 'Status Pembuatan Kartu';
 
   //CUSTOM CARD
-  static const String createCardText = 'Create Card';
-  static const String informationText = 'Information';
-  static const String userGuideText = 'User Guide';
+  static const String createCardText = 'Buat Kartu';
+  static const String informationText = 'Informasi';
+  static const String userGuideText = 'Panduan Aplikasi';
 
   //IMAGE GALLERY
-  static const String imageGalleryTitle = 'What we provide';
-  static const String contentTitle = 'Access card that you looking for';
+  static const String imageGalleryTitle = 'Layanan Kami';
+  static const String contentTitle = 'Kartu Yang Tersedia';
   //GUIDE
 
   static const List<String> validPositions = ['admin', 'supervisor', 'user'];
@@ -128,14 +127,14 @@ class LoginAssets {
   static const String petrokimiaGresikLogo =
       'assets/logo/logo_petrokimia_gresik.png';
   static const String sacText = 'System Access Control';
-  static const String loginText = 'Login';
+  static const String loginText = 'Masuk';
   static const String forgotPasswordText = 'Lupa password?';
 }
 
 class DraftAssets {
   static const String draftBackgroundImage =
       'assets/draft/draft_background.png';
-  static const String draftText = 'Draft';
+  static const String draftText = 'Draf';
 }
 
 class HistoryAssets {
@@ -143,28 +142,28 @@ class HistoryAssets {
       'assets/history/history_background.png';
   static const String takeCardLocationImage =
       'assets/history/take_card_location.png';
-  static const String historyText = 'History';
-  static const String tabAllText = 'All';
-  static const String tabOnProgressText = 'On Progress';
-  static const String tabCompletedText = 'Completed';
+  static const String historyText = 'Riwayat';
+  static const String tabAllText = 'Semua';
+  static const String tabOnProgressText = 'Berlangsung';
+  static const String tabCompletedText = 'Selesai';
   static const String cardSaveDateText = 'Disimpan pada';
-  static const String statusIndicatorOne = 'Submit';
-  static const String statusIndicatorTwo = 'On Progress';
-  static const String statusIndicatorThree = 'Completed';
-  static const String statusIndicatorFour = 'Finish';
-  static const String statusIndicatorFive = 'Rejected';
+  static const String statusIndicatorOne = 'Diajukan';
+  static const String statusIndicatorTwo = 'Diproses';
+  static const String statusIndicatorThree = 'Dapat Diambil';
+  static const String statusIndicatorFour = 'Selesai';
+  static const String statusIndicatorFive = 'Ditolak';
 
   //detail card
   static const String detailCardTitle = 'Status Pengajuan';
   static const List<String> stepTitles = [
-    'Submit',
-    'On Review',
-    'Take Card',
-    'Finish',
+    'Diajukan',
+    'Diproses',
+    'Dapat Diambil',
+    'Selesai',
   ];
   static const String takeCardText =
-      'Please take card at security department office. Use code below to take card at security officer';
-  static const String cardCredentialText = 'Card Credential :';
+      'Silahkan ambil kartu anda di kantor Departemen Keamanan. Gunakan kode dibawah ini untuk ditukarkan kepada admin.';
+  static const String cardCredentialText = 'Kode Kredensial :';
   static const String alreadyTakeText = 'Anda telah mengambil kartu.';
   static const String fieldText = 'Value';
   static const String valueText = 'Field';
@@ -223,7 +222,7 @@ class UtilsAssets {
   static const String iconSplashImage = 'assets/icons/icon_splash.png';
 
   static const String successLottieJson = 'assets/lottie/success.json';
-  static const String successTitle = 'Success!';
+  static const String successTitle = 'Pengajuan Sukses!';
   static const String successdesc =
-      'Please check history for card information.';
+      'Silahkan cek detail pengajuan kartu akses anda di riwayat.';
 }

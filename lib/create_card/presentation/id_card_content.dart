@@ -55,27 +55,24 @@ class _IDCardContentState extends State<IDCardContent> {
     return Stack(
       children: [
         Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            leading: IconButton(
-              icon: Icon(
-                Icons.close, // You can use a different icon if needed
-                color: Colors.white, // Customize the color
-              ),
-              onPressed: () {
+          appBar: CustomAppBar(
+            title: 'ID Card',
+            description: 'ID Card',
+            leading: GestureDetector(
+              onTap: () {
                 Navigator.pop(context);
               },
+              child: Image.asset('assets/icons/icon_close.png',
+                  height: 24, width: 24),
             ),
-            title:
-                Text('ID Card', style: Theme.of(context).textTheme.headline2),
           ),
           body: SingleChildScrollView(
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  buildTitleText(),
-                  buildDescriptionText(),
+                  // buildTitleText(),
+                  // buildDescriptionText(),
                   CustomTextEditableWidget(
                     labelText: 'Nama',
                     hintText: 'Masukkan Nama Anda',
@@ -95,22 +92,28 @@ class _IDCardContentState extends State<IDCardContent> {
                         child: Row(
                           children: [
                             ElevatedButton(
-                              onPressed: isEditing
-                                  ? () async {
-                                      myAlert(1);
-                                    }
-                                  : null,
-                              child: Text('Pilih Pas Foto'),
+                              onPressed: () {
+                                myAlert(1);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20.0),
+                                child: const Text('Pilih Pas Foto'),
+                              ),
                               style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                  isEditing
-                                      ? Color.fromARGB(255, 37, 109, 180)
-                                      : Colors.grey,
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(38.0),
+                                  ),
+                                ),
+                                padding: MaterialStateProperty.all<
+                                    EdgeInsetsGeometry>(
+                                  const EdgeInsets.symmetric(vertical: 15.0),
                                 ),
                               ),
                             ),
-                            SizedBox(width: 10),
+                            SizedBox(width: 15),
                             Expanded(
                               child: buildClickableImageName(
                                   profileImageName, profileImageFile),
@@ -135,35 +138,39 @@ class _IDCardContentState extends State<IDCardContent> {
           bottom: 0,
           left: 0,
           right: 0,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      setState(() {
-                        isEditing = !isEditing;
-                      });
-                    },
-                    child: Text(isEditing ? 'Done' : 'Edit Data'),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                        Color.fromARGB(255, 233, 192, 30),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 1,
+                // margin: EdgeInsets.symmetric(horizontal: 20), // Optional margin
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(
+                      255, 201, 201, 201), // Color of the divider
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromARGB(66, 178, 178, 178), // Shadow color
+                      offset: Offset(0, -4), // Offset in x and y directions
+                      blurRadius: 2, // Blur radius
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: SubmitCompleteDataConfirm(
+                        onSubmit: _createCard,
+                        validateFields: validateFields,
                       ),
                     ),
-                  ),
+                  ],
                 ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: SubmitCompleteDataConfirm(
-                    onSubmit: _createCard,
-                    validateFields: validateFields, // Remove the parentheses
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ],
@@ -503,4 +510,89 @@ Widget buildDescriptionText() {
       ),
     ),
   );
+}
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+  final String description;
+  final Widget? leading;
+  final List<Widget>? actions;
+  const CustomAppBar(
+      {super.key,
+      required this.title,
+      required this.description,
+      this.leading,
+      this.actions});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Color.fromARGB(255, 1, 58, 73),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(35),
+          bottomRight: Radius.circular(35),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(1.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: leading,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: actions ?? [],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20), // Space between title and description
+            Text(
+              description,
+              style: TextStyle(
+                fontFamily:
+                    'roboto', // Specify the font family if you have a custom font
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontWeight: FontWeight.w600,
+                fontSize: 30,
+              ),
+            ),
+            const SizedBox(height: 20), // Space between description and image
+            Text(
+              'Data yang diisi bukan merupakan data yang pernah didaftarkan sebelumnya (Baru). Pastikan data yang dimasukkan sesuai dengan ketentuan.',
+              textAlign: TextAlign.justify,
+              style: TextStyle(
+                fontFamily:
+                    'roboto', // Specify the font family if you have a custom font
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontWeight: FontWeight.w100,
+                fontSize: 14,
+                height: 1.5, // Add line spacing here
+              ),
+            ),
+            const SizedBox(height: 20), // Space between description and image
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight + 210);
 }

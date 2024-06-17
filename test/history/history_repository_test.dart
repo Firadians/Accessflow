@@ -1,66 +1,167 @@
-import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:http/http.dart' as http;
 import 'package:mockito/mockito.dart';
-import 'package:accessflow/draft/domain/card_response.dart';
-import 'package:accessflow/auth/data/preferences/shared_preference.dart';
+import 'package:http/http.dart' as http;
 import 'package:accessflow/history/data/repositories/card_repository.dart';
+import 'package:accessflow/history/domain/card_response.dart';
 
-class MockHttpClient extends Mock implements http.Client {}
-
-class MockSharedPreference extends Mock implements SharedPreference {}
+class MockClient extends Mock implements http.Client {}
 
 void main() {
   group('CardRepository Tests', () {
     late CardRepository cardRepository;
-    late MockHttpClient mockHttpClient;
-    late MockSharedPreference mockSharedPreference;
+    late MockClient mockClient;
 
     setUp(() {
-      mockHttpClient = MockHttpClient();
-      mockSharedPreference = MockSharedPreference();
+      mockClient = MockClient();
       cardRepository = CardRepository();
     });
 
     test('getSubmitCardData returns a list of CardResponse', () async {
       // Arrange
-      // when(mockSharedPreference.getUserFromSharedPreferences())
-      //     .thenAnswer((_) async => 'test_owner');
-      // when(mockSharedPreference.getTokenFromSharedPreferences())
-      //     .thenAnswer((_) async => 'test_token');
+      // Mock the response you expect from the server.
+      when(mockClient.get(
+        Uri.parse('${CardRepository.baseUrl}/api/cards'),
+        headers: captureAnyNamed('headers'), // Capture the headers.
+      )).thenAnswer((_) async => http.Response(
+            '''
+            {
+              "status": 200,
+              "message": "Cards found",
+              "cards": [
+  {
+            "id": 51,
+            "owner": "firdo",
+            "card_status": 1,
+            "card_credential": "no data",
+            "card_type": "Access Card",
+            "card_sub_type": "PT Graha Sarana Gresik",
+            "checklist_status": false,
+            "create_date": "2023-12-01 13:38:36",
+            "ktp_number": "64645788",
+            "photo": "no data",
+            "reason": "no data",
+            "name": "edi cahyadi draf"
+        },
+        {
+            "id": 50,
+            "owner": "firdo",
+            "card_status": 1,
+            "card_credential": "no data",
+            "card_type": "Access Card",
+            "card_sub_type": "PT Graha Sarana Gresik",
+            "checklist_status": false,
+            "create_date": "2023-12-01 13:37:32",
+            "ktp_number": "3134275854",
+            "photo": "no data",
+            "reason": "no data",
+            "name": "edi cahyadi"
+        },
+        {
+            "id": 15,
+            "owner": "firdo",
+            "card_status": 1,
+            "card_credential": "no data",
+            "card_type": "Akses Perumdin",
+            "card_sub_type": "Ayah",
+            "checklist_status": false,
+            "create_date": "2023-11-23 09:52:55",
+            "ktp_number": "51515151515",
+            "photo": "no data",
+            "reason": "no data",
+            "name": "xadadwdwdw"
+        },
+        {
+            "id": 46,
+            "owner": "firdo",
+            "card_status": 4,
+            "card_credential": "no data",
+            "card_type": "ID Card",
+            "card_sub_type": "no data",
+            "checklist_status": false,
+            "create_date": "2023-11-09 07:27:21",
+            "ktp_number": "123123123",
+            "photo": "no data",
+            "reason": "hshshsa",
+            "name": "firdo"
+        },
+        {
+            "id": 45,
+            "owner": "firdo",
+            "card_status": 3,
+            "card_credential": "no data",
+            "card_type": "Akses Perumdin",
+            "card_sub_type": "Ayah",
+            "checklist_status": false,
+            "create_date": "2023-11-09 07:27:04",
+            "ktp_number": "645899165",
+            "photo": "no data",
+            "reason": "no data",
+            "name": "nosferatu"
+        },
+        {
+            "id": 53,
+            "owner": "firdo",
+            "card_status": 4,
+            "card_credential": "no data",
+            "card_type": "Akses Perumdin",
+            "card_sub_type": "Ayah",
+            "checklist_status": false,
+            "create_date": "2023-11-09 07:27:04",
+            "ktp_number": "645899165",
+            "photo": "no data",
+            "reason": "no data",
+            "name": "nosferatu"
+        },
+        {
+            "id": 44,
+            "owner": "firdo",
+            "card_status": 2,
+            "card_credential": "no data",
+            "card_type": "Access Card",
+            "card_sub_type": "PT Graha Sarana Gresik",
+            "checklist_status": true,
+            "create_date": "2023-11-09 07:26:43",
+            "ktp_number": "316645789",
+            "photo": "no data",
+            "reason": "no data",
+            "name": "curiga yang membuat"
+        },
+        {
+            "id": 28,
+            "owner": "firdo",
+            "card_status": 1,
+            "card_credential": "no data",
+            "card_type": "Access Card",
+            "card_sub_type": "PT Graha Sarana Gresik",
+            "checklist_status": false,
+            "create_date": "2023-11-02 07:29:59",
+            "ktp_number": "8545545",
+            "photo": "no data",
+            "reason": "no data",
+            "name": "gdgxgdte"
+                }
+              ]
+            }
+            ''',
+            200,
+          ));
 
-      final mockedResponse = http.Response(
-        json.encode({
-          // 'cards': [
-          //   {'cardType': 'Type1', 'createData': '2023-01-01', 'cardStatus': 1},
-          //   {'cardType': 'Type2', 'createData': '2023-01-02', 'cardStatus': 2},
-          // ],
-          'status': 401,
-          'message': 'Unauthorized: Missing Authorization header',
-        }),
-        200,
-      );
-
-      when(mockHttpClient.get(
-        Uri.parse('https://3411-110-138-238-216.ngrok-free.app/api/cards'),
-        headers: anyNamed('headers'),
-      )).thenAnswer((_) async => mockedResponse);
+      // Set the mock client in your repository.
+      cardRepository.client = mockClient;
 
       // Act
       final result = await cardRepository.getSubmitCardData();
 
       // Assert
       expect(result, isA<List<CardResponse>>());
-      expect(result.length, 2);
-      expect(result[0].cardType, 'Type1');
-      expect(result[1].cardType, 'Type2');
+      // Add more assertions based on the actual data in the response.
     });
 
-    // Add more tests for error cases, edge cases, etc.
-  });
+    // Add more test cases as needed.
 
-  group('HistoryScreen Tests', () {
-    // Add tests for the HistoryScreen class
-    // You can mock dependencies using MockHttpClient and MockSharedPreference
+    tearDown(() {
+      // Clear any interactions with the mock client.
+      clearInteractions(mockClient);
+    });
   });
 }

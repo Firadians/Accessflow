@@ -108,7 +108,6 @@ class LoginScreenState extends State<LoginScreen> {
                 buildAppLogo(),
                 buildLoginForm(),
                 buildLoginButton(),
-                buildForgotPasswordButton(),
               ],
             ),
           ),
@@ -256,19 +255,15 @@ class LoginScreenState extends State<LoginScreen> {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: const Color.fromRGBO(50, 90, 102, 1),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(
+                30.0), // Adjust the value according to your preference
+          ),
         ),
         onPressed: _signIn,
         child: Text(LoginAssets.loginText,
             style: Theme.of(context).textTheme.displayMedium),
       ),
-    );
-  }
-
-  Widget buildForgotPasswordButton() {
-    return TextButton(
-      onPressed: () async {},
-      child: Text(LoginAssets.forgotPasswordText,
-          style: Theme.of(context).textTheme.headlineMedium),
     );
   }
 
@@ -296,7 +291,7 @@ class LoginScreenState extends State<LoginScreen> {
       Navigator.of(context).pop(); // Pop the loading dialog
 
       Fluttertoast.showToast(
-        msg: "Log In Success.",
+        msg: "Autentikasi Berhasil.",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.CENTER,
         timeInSecForIosWeb: 1,

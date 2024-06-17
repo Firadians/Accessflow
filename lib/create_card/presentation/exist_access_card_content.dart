@@ -64,167 +64,181 @@ class existAccessCardContentState extends State<existAccessCardContent> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            Icons.close,
-            color: Colors.white,
+    return Stack(
+      children: [
+        Scaffold(
+          appBar: CustomAppBar(
+            title: 'Access Card',
+            description: 'Access Card',
+            leading: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Image.asset('assets/icons/icon_close.png',
+                  height: 24, width: 24),
+            ),
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title:
-            Text('Access Card', style: Theme.of(context).textTheme.headline2),
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              buildTitleText(),
-              buildDescriptionText(),
-              // Inside the build method, use the stored data to populate the dropdown.
-              FutureBuilder<List<CardResponse>>(
-                future: Future.value(cardData), // Use the stored data.
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
-                      child: ShimmerLoadingDroplist(),
-                    );
-                  } else if (snapshot.hasError) {
-                    Text('Error: ${snapshot.error}');
-                    return Center(
-                      child: Text('Error: ${snapshot.error}'),
-                    );
-                  } else if (snapshot.data == null && snapshot.data!.isEmpty) {
-                    return Center(
-                      child: Text('No card data available.'),
-                    );
-                  } else {
-                    // Load card names into DropListModel.
-                    dropListModel = DropListModel(
-                      cardData.map((card) {
-                        return OptionItem(
-                          id: card.id.toString(),
-                          title: card.name,
-                        );
-                      }).toList(),
-                    );
-
-                    return Column(
-                      children: [
-                        SelectDropList(
-                          itemSelected: optionItemSelected,
-                          dropListModel: dropListModel,
-                          showIcon: true,
-                          showArrowIcon: true,
-                          showBorder: true,
-                          paddingTop: 0,
-                          icon: const Icon(Icons.person, color: Colors.black),
-                          onOptionSelected: (optionItem) {
-                            optionItemSelected = optionItem;
-                            setState(() {
-                              selectedItem =
-                                  optionItemSelected.title.toString();
-                              print(selectedItem);
-                              _loadUserDataForSelectedItems(
-                                  optionItemSelected.title.toString());
-                            });
-                          },
-                        ),
-                      ],
-                    );
-                  }
-                },
-              ),
-              CustomTextEditableWidget(
-                controller: nameController,
-                labelText: 'Nama',
-                hintText: 'Masukkan Nama Anda',
-                isEditing: isEditing,
-              ),
-              CustomNumberEditableWidget(
-                controller: ktpController,
-                labelText: 'Nomor KTP',
-                hintText: 'Masukkan Nomor KTP Anda',
-                isEditing: isEditing,
-              ),
-              Column(
+          body: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(
-                        20, 0, 0, 0), // Add left spacing of 10 units
-                    child: Row(
-                      children: [
-                        ElevatedButton(
-                          onPressed: isEditing
-                              ? () async {
-                                  myAlert(1);
-                                }
-                              : null,
-                          child: Text('Pilih Pas Foto'),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              isEditing
-                                  ? Color.fromARGB(255, 37, 109, 180)
-                                  : Colors.grey,
+                  // buildTitleText(),
+                  // buildDescriptionText(),
+                  // Inside the build method, use the stored data to populate the dropdown.
+                  FutureBuilder<List<CardResponse>>(
+                    future: Future.value(cardData), // Use the stored data.
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(
+                          child: ShimmerLoadingDroplist(),
+                        );
+                      } else if (snapshot.hasError) {
+                        Text('Error: ${snapshot.error}');
+                        return Center(
+                          child: Text('Error: ${snapshot.error}'),
+                        );
+                      } else if (snapshot.data == null &&
+                          snapshot.data!.isEmpty) {
+                        return Center(
+                          child: Text('No card data available.'),
+                        );
+                      } else {
+                        // Load card names into DropListModel.
+                        dropListModel = DropListModel(
+                          cardData.map((card) {
+                            return OptionItem(
+                              id: card.id.toString(),
+                              title: card.name,
+                            );
+                          }).toList(),
+                        );
+
+                        return Column(
+                          children: [
+                            SelectDropList(
+                              itemSelected: optionItemSelected,
+                              dropListModel: dropListModel,
+                              showIcon: true,
+                              showArrowIcon: true,
+                              showBorder: true,
+                              paddingTop: 0,
+                              icon:
+                                  const Icon(Icons.person, color: Colors.black),
+                              onOptionSelected: (optionItem) {
+                                optionItemSelected = optionItem;
+                                setState(() {
+                                  selectedItem =
+                                      optionItemSelected.title.toString();
+                                  print(selectedItem);
+                                  _loadUserDataForSelectedItems(
+                                      optionItemSelected.title.toString());
+                                });
+                              },
                             ),
-                          ),
+                          ],
+                        );
+                      }
+                    },
+                  ),
+                  CustomTextEditableWidget(
+                    controller: nameController,
+                    labelText: 'Nama',
+                    hintText: 'Masukkan Nama Anda',
+                    isEditing: isEditing,
+                  ),
+                  CustomNumberEditableWidget(
+                    controller: ktpController,
+                    labelText: 'Nomor KTP',
+                    hintText: 'Masukkan Nomor KTP Anda',
+                    isEditing: isEditing,
+                  ),
+                  Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(
+                            20, 0, 0, 0), // Add left spacing of 10 units
+                        child: Row(
+                          children: [
+                            ElevatedButton(
+                              onPressed: isEditing
+                                  ? () async {
+                                      myAlert(1);
+                                    }
+                                  : null,
+                              child: Text('Pilih Pas Foto'),
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  isEditing
+                                      ? Color.fromARGB(255, 37, 109, 180)
+                                      : Colors.grey,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 10), // Add spacing
+                            Expanded(
+                              child: buildClickableImageName(
+                                  profileImageName, profileImageFile),
+                            ),
+                          ],
                         ),
-                        SizedBox(width: 10), // Add spacing
-                        Expanded(
-                          child: buildClickableImageName(
-                              profileImageName, profileImageFile),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
+                  ),
+
+                  SelectDropList(
+                    itemSelected: subTypeItemSelected,
+                    dropListModel: subTypeDropList,
+                    showIcon: true, // Show Icon in DropDown Title
+                    showArrowIcon: true, // Show Arrow Icon in DropDown
+                    showBorder: true,
+                    paddingTop: 0,
+                    icon: const Icon(Icons.person, color: Colors.black),
+                    onOptionSelected: (optionItem) {
+                      subTypeItemSelected = optionItem;
+                      setState(() {
+                        subTypeSelectedItem =
+                            subTypeItemSelected.title.toString();
+                      });
+                    },
                   ),
                 ],
               ),
-
-              SelectDropList(
-                itemSelected: subTypeItemSelected,
-                dropListModel: subTypeDropList,
-                showIcon: true, // Show Icon in DropDown Title
-                showArrowIcon: true, // Show Arrow Icon in DropDown
-                showBorder: true,
-                paddingTop: 0,
-                icon: const Icon(Icons.person, color: Colors.black),
-                onOptionSelected: (optionItem) {
-                  subTypeItemSelected = optionItem;
-                  setState(() {
-                    subTypeSelectedItem = subTypeItemSelected.title.toString();
-                  });
-                },
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: 1,
+                // margin: EdgeInsets.symmetric(horizontal: 20), // Optional margin
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(
+                      255, 201, 201, 201), // Color of the divider
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color.fromARGB(66, 178, 178, 178), // Shadow color
+                      offset: Offset(0, -4), // Offset in x and y directions
+                      blurRadius: 2, // Blur radius
+                    ),
+                  ],
+                ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.all(20),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          setState(() {
-                            isEditing = !isEditing;
-                          });
-                        },
-                        child: Text(isEditing ? 'Done' : 'Edit Data'),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Color.fromARGB(255, 233, 192,
-                                  30)), // Set the background color here
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 10),
                     Expanded(
                       child: SubmitCompleteDataConfirm(
                         onSubmit: _createCard,
-                        validateFields:
-                            validateFields, // Remove the parentheses
+                        validateFields: validateFields,
                       ),
                     ),
                   ],
@@ -233,7 +247,7 @@ class existAccessCardContentState extends State<existAccessCardContent> {
             ],
           ),
         ),
-      ),
+      ],
     );
   }
 
@@ -584,4 +598,89 @@ Widget buildDescriptionText() {
       ),
     ),
   );
+}
+
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String title;
+  final String description;
+  final Widget? leading;
+  final List<Widget>? actions;
+  const CustomAppBar(
+      {super.key,
+      required this.title,
+      required this.description,
+      this.leading,
+      this.actions});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        color: Color.fromARGB(255, 1, 58, 73),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(35),
+          bottomRight: Radius.circular(35),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+      child: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(1.0),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: leading,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: actions ?? [],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20), // Space between title and description
+            Text(
+              description,
+              style: TextStyle(
+                fontFamily:
+                    'roboto', // Specify the font family if you have a custom font
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontWeight: FontWeight.w600,
+                fontSize: 30,
+              ),
+            ),
+            const SizedBox(height: 20), // Space between description and image
+            Text(
+              'Data yang diisi bukan merupakan data yang pernah didaftarkan sebelumnya (Baru). Pastikan data yang dimasukkan sesuai dengan ketentuan.',
+              textAlign: TextAlign.justify,
+              style: TextStyle(
+                fontFamily:
+                    'roboto', // Specify the font family if you have a custom font
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontWeight: FontWeight.w100,
+                fontSize: 14,
+                height: 1.5, // Add line spacing here
+              ),
+            ),
+            const SizedBox(height: 20), // Space between description and image
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight + 210);
 }

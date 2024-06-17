@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:accessflow/draft/domain/card_response.dart';
 import 'package:accessflow/auth/data/preferences/shared_preference.dart';
 import 'package:accessflow/history/presentation/detail_card_screen.dart';
@@ -21,12 +22,52 @@ class _HistoryScreenState extends State<HistoryScreen>
   bool isLoading = true;
   String? owner;
   late TabController _tabController;
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   @override
   void initState() {
     super.initState();
     _loadUserFromSharedPreferences();
     _tabController = TabController(length: 3, vsync: this);
+    _initializeNotifications();
+  }
+
+  void _initializeNotifications() {
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
+      android: initializationSettingsAndroid,
+    );
+
+    flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+    );
+  }
+
+  Future<void> _showNotification() async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'your_channel_id',
+      'your_channel_name',
+      // 'your_channel_description',
+      importance: Importance.max,
+      priority: Priority.high,
+      showWhen: false,
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'Kartu anda telah selesai',
+      'Silahkan lakukan pengambilan di departemen keamanan.',
+      platformChannelSpecifics,
+      payload: 'item x',
+    );
   }
 
   @override
@@ -177,6 +218,14 @@ class _HistoryScreenState extends State<HistoryScreen>
                 snapshot.data!.where((card) => card.cardStatus == 4).toList();
           }
 
+          // Check if there is any card with status 3
+          bool hasStatusThreeCard =
+              snapshot.data!.any((card) => card.cardStatus == 3);
+
+          if (hasStatusThreeCard) {
+            _showNotification();
+          }
+
           if (filteredCards.isEmpty) {
             return Center(
               child: Column(
@@ -266,7 +315,11 @@ class _HistoryScreenState extends State<HistoryScreen>
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0, 5, 0, 0),
                                           child: Text(
-                                              '${HistoryAssets.cardSaveDateText} : ${card.createData}'),
+                                            '${HistoryAssets.cardSaveDateText} : ${card.createData}',
+                                            style: TextStyle(
+                                                fontSize:
+                                                    12.0), // Specify the font size here
+                                          ),
                                         ),
                                       ],
                                     ),

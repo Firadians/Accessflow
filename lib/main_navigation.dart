@@ -14,6 +14,12 @@ class MainNavigation extends StatefulWidget {
 
 class _MainNavigationState extends State<MainNavigation> {
   int _currentIndex = 0;
+  final screens = [
+    HomeScreen(),
+    DraftScreen(),
+    HistoryScreen(),
+    ProfileScreen(),
+  ];
   final PageController _pageController = PageController(initialPage: 0);
 
   @override
@@ -36,44 +42,48 @@ class _MainNavigationState extends State<MainNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: PageView(
-        controller: _pageController,
-        physics: ClampingScrollPhysics(), // Disable overscroll glow
-        children: [
-          HomeScreen(),
-          DraftScreen(),
-          HistoryScreen(),
-          ProfileScreen(),
-        ],
-      ),
-      bottomNavigationBar: CurvedNavigationBar(
-        index: _currentIndex,
-        onTap: (index) {
-          _pageController.jumpToPage(index);
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        backgroundColor: Color.fromARGB(0, 0, 0, 0),
-        buttonBackgroundColor: Color.fromARGB(255, 226, 184, 35),
-        items: [
-          Icon(Icons.home,
-              size: 30,
-              color:
-                  _currentIndex == 0 ? Colors.white : const Color(0xFFC8C9CB)),
-          Icon(Icons.folder,
-              size: 30,
-              color:
-                  _currentIndex == 1 ? Colors.white : const Color(0xFFC8C9CB)),
-          Icon(Icons.history,
-              size: 30,
-              color:
-                  _currentIndex == 2 ? Colors.white : const Color(0xFFC8C9CB)),
-          Icon(Icons.person,
-              size: 30,
-              color:
-                  _currentIndex == 3 ? Colors.white : const Color(0xFFC8C9CB)),
-        ],
+      body: screens[_currentIndex],
+      bottomNavigationBar: NavigationBarTheme(
+        data: NavigationBarThemeData(
+          indicatorColor: Colors.blue.shade100,
+          backgroundColor: Colors.white, // Set the background color to white
+          labelTextStyle: MaterialStateProperty.all(
+            TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+          ),
+        ),
+        child: NavigationBar(
+          height: 60,
+          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+          animationDuration: Duration(seconds: 1),
+          selectedIndex: _currentIndex,
+          onDestinationSelected: (int newIndex) {
+            setState(() {
+              _currentIndex = newIndex;
+            });
+          },
+          destinations: [
+            NavigationDestination(
+              icon: Icon(Icons.home_outlined),
+              selectedIcon: Icon(Icons.home),
+              label: 'Beranda',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.save_outlined),
+              selectedIcon: Icon(Icons.save),
+              label: 'Draf',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.history_outlined),
+              selectedIcon: Icon(Icons.history),
+              label: 'Riwayat',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.account_circle_outlined),
+              selectedIcon: Icon(Icons.account_circle),
+              label: 'Profil',
+            ),
+          ],
+        ),
       ),
     );
   }

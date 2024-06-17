@@ -10,41 +10,59 @@ import 'package:accessflow/home/presentation/widget/image_gallery_widget.dart';
 import 'package:accessflow/auth/data/preferences/shared_preference.dart';
 import 'package:accessflow/utils/strings.dart';
 import 'package:accessflow/information/information_screen.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:accessflow/draft/domain/card_response.dart';
+import 'package:accessflow/history/data/repositories/card_repository.dart';
+import 'package:accessflow/home/presentation/notification_history_screen.dart';
+import 'package:accessflow/home/domain/notification_item.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
 
   @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Stack(clipBehavior: Clip.none, children: [
-      Positioned(
-        right: 0.0,
-        top: -20.0,
-        child: Opacity(
-          opacity: 1,
-          child: Image.asset(
-            HomeAssets.homeBackgroundImage,
-            fit: BoxFit.fitWidth,
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Positioned(
+          right: 0.0,
+          top: -20.0,
+          child: Opacity(
+            opacity: 1,
+            child: Image.asset(
+              HomeAssets.homeBackgroundImage,
+              fit: BoxFit.fitWidth,
+            ),
           ),
         ),
-      ),
-      SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              height: kToolbarHeight,
-            ),
-            homeSection(),
-            const SizedBox(
-              height: 50.0,
-            ),
-            ContentSection(),
-          ],
+        SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(
+                height: kToolbarHeight,
+              ),
+              homeSection(),
+              const SizedBox(
+                height: 50.0,
+              ),
+              ContentSection(),
+            ],
+          ),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 }
 
@@ -150,11 +168,106 @@ Widget homeSection() {
   );
 }
 
-class ContentSection extends StatelessWidget {
+class ContentSection extends StatefulWidget {
+  @override
+  _ContentSectionState createState() => _ContentSectionState();
+}
+
+class _ContentSectionState extends State<ContentSection> {
+  late Future<String?> _positionFuture;
+  final CardRepository cardRepository = CardRepository();
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  List<CardResponse> allCards = [];
+  List<NotificationItem> notificationHistory = [];
+  bool notificationShown = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeNotifications();
+    _checkCardStatusInBackground();
+
+    _positionFuture = SharedPreference().getPositionFromSharedPreferences();
+  }
+
+  void _initializeNotifications() {
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
+      android: initializationSettingsAndroid,
+    );
+
+    flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+    );
+  }
+
+  Future<void> _showNotification() async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'your_channel_id',
+      'your_channel_name',
+      // 'your_channel_description',
+      importance: Importance.max,
+      priority: Priority.high,
+      showWhen: false,
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'Kartu anda telah selesai',
+      'Silahkan lakukan pengambilan di departemen keamanan.',
+      platformChannelSpecifics,
+      payload: 'notification_screen', // Add a payload to indicate the action
+    );
+
+    // Add to notification history
+    setState(() {
+      notificationHistory.add(NotificationItem(
+        title: 'Kartu anda telah selesai',
+        body: 'Silahkan lakukan pengambilan di departemen keamanan.',
+        timestamp: DateTime.now(),
+      ));
+    });
+  }
+
+  Future<void> _checkCardStatusInBackground() async {
+    if (notificationShown)
+      return; // Skip if notification has already been shown
+
+    try {
+      List<CardResponse> cards = await cardRepository.getSubmitCardData();
+      bool hasStatusThree = cards.any((card) => card.cardStatus == 3);
+      if (hasStatusThree) {
+        _showNotification();
+        notificationShown =
+            true; // Set the flag to true after showing the notification
+      }
+    } catch (e) {
+      print('Error loading data: $e');
+    }
+  }
+
+  void _navigateToNotificationHistory() {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => NotificationHistoryScreen(
+          notifications: notificationHistory,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<String?>(
-      future: SharedPreference().getPositionFromSharedPreferences(),
+      future: _positionFuture,
       builder: (context, positionSnapshot) {
         if (positionSnapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
@@ -494,7 +607,8 @@ class ContentSection extends StatelessWidget {
                           GestureDetector(
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => InformationScreen(),
+                                builder: (context) => NotificationHistoryScreen(
+                                    notifications: notificationHistory),
                               ));
                             },
                             child: customCard(
