@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:accessflow/l10n/l10n.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -73,9 +72,6 @@ class _MyAppState extends State<MyApp> {
       //Dual Language Initialization
       localizationsDelegates: const [
         AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
         Locale('en', 'US'),
