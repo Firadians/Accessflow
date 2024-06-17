@@ -13,9 +13,9 @@ import 'package:accessflow/utils/app_dependencies.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:accessflow/utils/strings.dart';
-import 'package:flutter/material.dart';
-import 'package:device_preview/device_preview.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:flutter/material.dart';
+// import 'package:device_preview/device_preview.dart';
+// import 'package:flutter/foundation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,12 +26,13 @@ void main() async {
   final appDependencies = AppDependencies(
     sharedPreferences: prefs,
   );
-  runApp(
-    DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => MyApp(dependencies: appDependencies),
-    ),
-  );
+  // runApp(
+  //   DevicePreview(
+  //     enabled: !kReleaseMode,
+  //     builder: (context) => MyApp(dependencies: appDependencies),
+  //   ),
+  // );
+  runApp(MyApp(dependencies: appDependencies));
 }
 
 class MyApp extends StatefulWidget {
