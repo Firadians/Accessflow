@@ -8,25 +8,30 @@ import 'package:accessflow/profile/presentation/call_center_screen.dart';
 import 'package:accessflow/profile/presentation/faq_screen.dart';
 import 'package:accessflow/profile/presentation/tos_screen.dart';
 import 'package:accessflow/theme/app_theme.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:accessflow/splashscreen.dart';
 import 'package:accessflow/utils/app_dependencies.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:accessflow/utils/strings.dart';
+import 'package:flutter/material.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   //Locked device in potrait mode
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  await Firebase.initializeApp();
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final appDependencies = AppDependencies(
     sharedPreferences: prefs,
   );
-
-  runApp(MyApp(dependencies: appDependencies));
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => MyApp(dependencies: appDependencies),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {
