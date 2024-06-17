@@ -31,9 +31,6 @@ dependencies:
   flutter:
     sdk: flutter
 
-  #dual language localization
-  flutter_localizations:
-    sdk: flutter
 
   flutter_local_notifications: ^12.0.0
   
