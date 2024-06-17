@@ -115,7 +115,7 @@ class _DetailCardScreenState extends State<DetailCardScreen> {
           },
         ),
         title: Text(HistoryAssets.detailCardTitle,
-            style: Theme.of(context).textTheme.headline2),
+            style: Theme.of(context).textTheme.displayMedium),
       ),
       body: SingleChildScrollView(
         physics: ClampingScrollPhysics(), // Disable overscroll glow

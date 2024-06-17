@@ -87,7 +87,7 @@ class _HomeAdminState extends State<HomeAdmin>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('History', style: Theme.of(context).textTheme.headline1),
+        title: Text('History', style: Theme.of(context).textTheme.displayLarge),
         actions: [
           IconButton(
             icon: Icon(Icons.logout),

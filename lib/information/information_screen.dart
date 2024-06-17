@@ -46,8 +46,8 @@ class _InformationScreenPage extends State<InformationScreen> {
             Navigator.pop(context);
           },
         ),
-        title:
-            Text('Information', style: Theme.of(context).textTheme.headline2),
+        title: Text('Information',
+            style: Theme.of(context).textTheme.displayMedium),
       ),
       body: ListView.builder(
         itemCount: data.length,

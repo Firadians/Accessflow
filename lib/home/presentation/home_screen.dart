@@ -133,7 +133,8 @@ Widget homeSection() {
                           ? Text.rich(
                               TextSpan(
                                 text: "${HomeAssets.welcomeText},\n",
-                                style: Theme.of(context).textTheme.headline2,
+                                style:
+                                    Theme.of(context).textTheme.displayMedium,
                                 children: [
                                   TextSpan(
                                     text: username,
@@ -600,7 +601,7 @@ class _ContentSectionState extends State<ContentSection> {
                               imagePath: HomeAssets.makeCardIcon,
                               title: HomeAssets.createCardText,
                               titleTextStyle:
-                                  Theme.of(context).textTheme.headline6,
+                                  Theme.of(context).textTheme.headlineSmall,
                             ),
                           ),
                           //INFORMATION
@@ -615,7 +616,7 @@ class _ContentSectionState extends State<ContentSection> {
                                 imagePath: HomeAssets.informationIcon,
                                 title: HomeAssets.informationText,
                                 titleTextStyle:
-                                    Theme.of(context).textTheme.headline6),
+                                    Theme.of(context).textTheme.headlineSmall),
                           ),
                           //USER APP GUIDE
                           GestureDetector(
@@ -631,7 +632,7 @@ class _ContentSectionState extends State<ContentSection> {
                               imagePath: HomeAssets.userGuideIcon,
                               title: HomeAssets.userGuideText,
                               titleTextStyle:
-                                  Theme.of(context).textTheme.headline6,
+                                  Theme.of(context).textTheme.headlineSmall,
                             ),
                           ),
                         ],
@@ -649,7 +650,7 @@ class _ContentSectionState extends State<ContentSection> {
                         left: 20.0,
                       ),
                       child: Text(HomeAssets.imageGalleryTitle,
-                          style: Theme.of(context).textTheme.headline5),
+                          style: Theme.of(context).textTheme.headlineLarge),
                     ),
                   ],
                 ),
@@ -662,7 +663,7 @@ class _ContentSectionState extends State<ContentSection> {
                     left: 20.0,
                   ),
                   child: Text(HomeAssets.contentTitle,
-                      style: Theme.of(context).textTheme.headline5),
+                      style: Theme.of(context).textTheme.headlineLarge),
                 ),
                 Column(
                   mainAxisSize: MainAxisSize.max,

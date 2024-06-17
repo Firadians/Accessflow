@@ -38,11 +38,18 @@ TextTheme customTextTheme = TextTheme(
   ),
 
   //FONT BLACK
-
-  headlineSmall: GoogleFonts.roboto(
+  headlineLarge: GoogleFonts.roboto(
     // Use a different font for bodyText1
     textStyle: const TextStyle(
       fontSize: 16.0,
+      fontWeight: FontWeight.normal,
+      color: Color.fromARGB(255, 24, 24, 24), // Change the text color
+    ),
+  ),
+  headlineSmall: GoogleFonts.roboto(
+    // Use a different font for bodyText1
+    textStyle: const TextStyle(
+      fontSize: 12.0,
       fontWeight: FontWeight.normal,
       color: Color.fromARGB(255, 24, 24, 24), // Change the text color
     ),

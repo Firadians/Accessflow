@@ -193,7 +193,7 @@ class _CardAdminState extends State<CardAdmin> {
           },
         ),
         title: Text('Status Pengajuan',
-            style: Theme.of(context).textTheme.headline1),
+            style: Theme.of(context).textTheme.displayLarge),
       ),
       body: SingleChildScrollView(
         child: Column(
