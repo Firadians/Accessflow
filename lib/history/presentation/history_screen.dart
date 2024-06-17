@@ -109,7 +109,7 @@ class _HistoryScreenState extends State<HistoryScreen>
     return Scaffold(
       appBar: AppBar(
         title: Text(HistoryAssets.historyText,
-            style: Theme.of(context).textTheme.headline1),
+            style: Theme.of(context).textTheme.displayLarge),
         bottom: TabBar(
           controller: _tabController,
           tabs: [
