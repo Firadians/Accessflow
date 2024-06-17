@@ -17,7 +17,7 @@ class TosScreen extends StatelessWidget {
         ),
         title: Text(
           'AccessFlow - ToS',
-          style: Theme.of(context).textTheme.headline2,
+          style: Theme.of(context).textTheme.displayMedium,
         ),
       ),
       body: Padding(

@@ -25,8 +25,8 @@ class _CallCenterScreenState extends State<CallCenterScreen> {
             Navigator.pop(context);
           },
         ),
-        title:
-            Text('Call Center', style: Theme.of(context).textTheme.headline2),
+        title: Text('Call Center',
+            style: Theme.of(context).textTheme.displayMedium),
       ),
       body: ListView.builder(
         itemCount: ProfileAssets.callCenterData.length,

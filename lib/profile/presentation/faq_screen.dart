@@ -24,7 +24,7 @@ class _FaqScreenState extends State<FaqScreen> {
             Navigator.pop(context);
           },
         ),
-        title: Text('FAQ', style: Theme.of(context).textTheme.headline2),
+        title: Text('FAQ', style: Theme.of(context).textTheme.displayMedium),
       ),
       body: ListView.builder(
         itemCount: ProfileAssets.faqData.length,
